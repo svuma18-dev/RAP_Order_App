@@ -1,0 +1,18 @@
+@AccessControl.authorizationCheck: #NOT_REQUIRED
+@EndUserText.label: 'Customer Projection View'
+@Metadata.ignorePropagatedAnnotations: true
+@Metadata.allowExtensions: true
+define root view entity ZC_SV_CUSTOMER
+  provider contract transactional_query 
+  as projection on ZR_SV_CUSTOMER
+{
+  key CustomerUuid,
+      Name,
+      City,
+      Country,
+      Email,
+      CreatedBy,
+      LastChangedBy,
+      CreatedAt,
+      ChangedAt
+}
