@@ -1,0 +1,23 @@
+@EndUserText.label : 'Order Item Details'
+@AbapCatalog.enhancement.category : #NOT_EXTENSIBLE
+@AbapCatalog.tableCategory : #TRANSPARENT
+@AbapCatalog.deliveryClass : #A
+@AbapCatalog.dataMaintenance : #RESTRICTED
+define table zsv_ord_item {
+
+  key client    : abap.clnt not null;
+  key item_no   : sysuuid_x16 not null;
+  key order_id  : sysuuid_x16 not null;
+  product       : abap.char(35);
+  @Semantics.quantity.unitOfMeasure : 'zsv_ord_item.uom'
+  quantity      : abap.quan(4,2);
+  uom           : abap.unit(3);
+  @Semantics.amount.currencyCode : 'zsv_ord_item.currency'
+  unit_price    : abap.curr(13,2);
+  currency      : abap.cuky;
+  createdby     : abp_creation_user;
+  createdat     : abp_creation_tstmpl;
+  lastchangedby : abp_lastchange_user;
+  lastchangedat : abp_lastchange_tstmpl;
+
+}
