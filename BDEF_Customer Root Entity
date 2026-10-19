@@ -1,0 +1,39 @@
+managed implementation in class zbp_r_sv_customer unique;
+strict ( 2 );
+with draft;
+
+define behavior for ZR_SV_CUSTOMER alias Customer
+persistent table zsv_customer
+draft table zsv_customer_d
+lock master total etag ChangedAt
+authorization master ( instance )
+etag master ChangedAt
+{
+  create ( authorization : global );
+  update;
+  delete;
+  field ( readonly, numbering : managed ) CustomerUuid;
+  field ( mandatory : create ) Name, Country, Email;
+  field ( readonly ) CreatedAt, CreatedBy, LastChangedBy, ChangedAt;
+
+  draft action Activate optimized;
+  draft action Edit;
+  draft action Resume;
+  draft action Discard;
+  draft determine action Prepare;
+
+  validation valCustomer on save { create; field Name, country, Email; }
+
+  mapping for zsv_customer
+    {
+      CustomerUuid  = customer_uuid;
+      Name          = name;
+      City          = city;
+      Country       = country;
+      Email         = email;
+      CreatedBy     = created_by;
+      CreatedAt     = created_at;
+      LastChangedBy = last_changed_by;
+      ChangedAt     = changed_at;
+    }
+}
