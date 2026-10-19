@@ -1,0 +1,254 @@
+CLASS zcl_dv_data_upload_ord DEFINITION
+  PUBLIC
+  FINAL
+  CREATE PUBLIC .
+
+  PUBLIC SECTION.
+
+    INTERFACES if_oo_adt_classrun .
+  PROTECTED SECTION.
+  PRIVATE SECTION.
+    METHODS: generate_order_header,
+      generate_order_item.
+ENDCLASS.
+
+
+
+CLASS zcl_dv_data_upload_ord IMPLEMENTATION.
+
+
+  METHOD if_oo_adt_classrun~main.
+
+    DELETE FROM zsv_order.
+    DELETE FROM zsv_ord_item.
+
+    generate_order_header(  ).
+    generate_order_item(  ).
+
+    out->write( 'Order - data loaded successfully!' ).
+
+  ENDMETHOD.
+
+  METHOD generate_order_header.
+
+    DATA: lt_orders TYPE STANDARD TABLE OF zsv_order WITH KEY order_id.
+
+    " Example customer IDs - replace with actual customer IDs from your system
+    DATA(lv_cust1) = '00505601D4521EDBA7E66FC7B8587F10'.
+    DATA(lv_cust2) = '00505601D4521EDBA7E66FC7B8587F11'.
+    DATA(lv_cust3) = '00505601D4521EDBA7E66FC7B8587F12'.
+    DATA(lv_cust4) = '00505601D4521EDBA7E66FC7B8587F13'.
+    DATA(lv_cust5) = '00505601D4521EDBA7E66FC7B8587F14'.
+
+    GET TIME STAMP FIELD DATA(ts).
+
+    " Fill internal table with sample order data
+    lt_orders = VALUE #(
+      ( order_id     = '00505601D4521EDBA7E66FC7B8587F30'
+        customer_id  = lv_cust1
+        order_dt   = '20260810'
+        currency       = 'USD'
+        amount      = '1250.75'
+        status      = 'PRC'
+        comments    = 'Standard processing for new customer'
+        createdby   = sy-uname
+        createdat   = ts
+        lastchangedby = sy-uname
+        lastchangedat   = ts )
+
+      ( order_id     = '00505601D4521EDBA7E66FC7B8587F41'
+        customer_id  = lv_cust2
+        order_dt  = '20260808'
+        currency       = 'EUR'
+        amount      = '3420.50'
+        status      = 'ONH'
+        comments    = 'Waiting for additional payment verification'
+        createdby   = sy-uname
+        createdat   = ts
+        lastchangedby = sy-uname
+        lastchangedat   = ts )
+
+      ( order_id    = '00505601D4521EDBA7E66FC7B8587F52'
+        customer_id  = lv_cust3
+        order_dt  = '20260805'
+        currency        = 'GBP'
+        amount      = '2180.25'
+        status      = 'CMP'
+        comments    = 'Order completed and shipped on time'
+        createdby   = sy-uname
+        createdat   = ts
+        lastchangedby = sy-uname
+        lastchangedat  = ts )
+
+      ( order_id     = '00505601D4521EDBA7E66FC7B8587F63'
+        customer_id  = lv_cust4
+        order_dt   = '20260803'
+        currency        = 'JPY'
+        amount      = '78500.00'
+        status      = 'CAN'
+        comments    = 'Customer requested cancellation due to delay'
+        createdby   = sy-uname
+        createdat   = ts
+        lastchangedby = sy-uname
+        lastchangedat   = ts )
+
+      ( order_id     = '00505601D4521EDBA7E66FC7B8587F74'
+        customer_id  = lv_cust5
+        order_dt   = '20260801'
+        currency        = 'USD'
+        amount      = '945.30'
+        status      = 'PND'
+        comments    = 'Awaiting payment confirmation from bank'
+        createdby   = sy-uname
+        createdat   = ts
+        lastchangedby = sy-uname
+        lastchangedat   = ts )
+    ).
+
+    " Insert data into the database table
+    INSERT zsv_order FROM TABLE @lt_orders.
+
+
+  ENDMETHOD.
+
+  METHOD generate_order_item.
+
+    " Define internal table for order items
+    DATA: lt_order_items TYPE STANDARD TABLE OF zsv_ord_item WITH KEY item_no.
+
+    GET TIME STAMP FIELD DATA(ts).
+
+    " Fill internal table with sample order item data
+    lt_order_items = VALUE #(
+      " Items for Order 1
+      ( item_no = '00777272D4521ABDE7E66FC7B8587A01'
+        order_id    = '00505601D4521EDBA7E66FC7B8587F30'
+        product = 'Premium Office Chair'
+        uom   = 'EA'
+        quantity    = '3.00'
+        currency   = 'USD'
+        unit_price   = '175.25'
+        createdby   = sy-uname
+        createdat   = ts
+        lastchangedby = sy-uname
+        lastchangedat   = ts )
+
+      ( item_no = '00777272D4521ABDE7E66FC7B8587A02'
+        order_id     = '00505601D4521EDBA7E66FC7B8587F30'
+        product = 'Ergonomic Keyboard'
+        uom   = 'EA'
+        quantity    = '5.00'
+        currency   = 'USD'
+        unit_price   = '145.00'
+        createdby   = sy-uname
+        createdat   = ts
+        lastchangedby = sy-uname
+        lastchangedat  = ts )
+
+      " Items for Order 2
+      ( item_no = '00777272D4521ABDE7E66FC7B8587A03'
+        order_id     = '00505601D4521EDBA7E66FC7B8587F41'
+        product = 'Enterprise Server Hardware'
+        uom   = 'EA'
+        quantity    = '1.00'
+        currency   = 'EUR'
+        unit_price   = '2850.50'
+        createdby   = sy-uname
+        createdat   = ts
+        lastchangedby = sy-uname
+        lastchangedat   = ts )
+
+      ( item_no = '00777272D4521ABDE7E66FC7B8587A04'
+        order_id     = '00505601D4521EDBA7E66FC7B8587F41'
+        product = 'Network Switch 24-Port'
+        uom   = 'EA'
+        quantity    = '2.00'
+        currency   = 'EUR'
+        unit_price   = '285.00'
+        createdby   = sy-uname
+        createdat   = ts
+        lastchangedby = sy-uname
+        lastchangedat   = ts )
+
+      " Items for Order 3
+      ( item_no = '00777272D4521ABDE7E66FC7B8587A05'
+        order_id     = '00505601D4521EDBA7E66FC7B8587F52'
+        product = 'Professional Monitor 27"'
+        uom   = 'EA'
+        quantity    = '4.00'
+        currency   = 'GBP'
+        unit_price   = '420.25'
+        createdby   = sy-uname
+        createdat   = ts
+        lastchangedby = sy-uname
+        lastchangedat   = ts )
+
+      ( item_no = '00777272D4521ABDE7E66FC7B8587A06'
+        order_id     = '00505601D4521EDBA7E66FC7B8587F52'
+        product = 'Wireless Mouse Premium'
+        uom   = 'EA'
+        quantity    = '8.00'
+        currency   = 'GBP'
+        unit_price   = '62.50'
+        createdby   = sy-uname
+        createdat   = ts
+        lastchangedby = sy-uname
+        lastchangedat   = ts )
+
+      " Items for Order 4
+      ( item_no = '00777272D4521ABDE7E66FC7B8587A07'
+        order_id     = '00505601D4521EDBA7E66FC7B8587F63'
+        product = 'Office Desk Standing'
+        uom   = 'EA'
+        quantity    = '5.00'
+        currency   = 'JPY'
+        unit_price   = '12500.00'
+        createdby   = sy-uname
+        createdat   = ts
+        lastchangedby = sy-uname
+        lastchangedat   = ts )
+
+      ( item_no = '00777272D4521ABDE7E66FC7B8587A08'
+        order_id     = '00505601D4521EDBA7E66FC7B8587F63'
+        product = 'Document Scanner Professional'
+        uom   = 'EA'
+        quantity    = '1.00'
+        currency   = 'JPY'
+        unit_price   = '16000.00'
+        createdby   = sy-uname
+        createdat   = ts
+        lastchangedby = sy-uname
+        lastchangedat   = ts )
+
+      " Items for Order 5
+      ( item_no = '00777272D4521ABDE7E66FC7B8587A09'
+        order_id     = '00505601D4521EDBA7E66FC7B8587F74'
+        product = 'Laser Printer Color'
+        uom   = 'EA'
+        quantity    = '1.00'
+        currency   = 'USD'
+        unit_price   = '745.30'
+        createdby   = sy-uname
+        createdat   = ts
+        lastchangedby = sy-uname
+        lastchangedat   = ts )
+
+      ( item_no = '00777272D4521ABDE7E66FC7B8587A10'
+        order_id     = '00505601D4521EDBA7E66FC7B8587F74'
+        product = 'Toner Cartridge Set'
+        uom   = 'EA'
+        quantity    = '2.00'
+        currency  = 'USD'
+        unit_price   = '100.00'
+        createdby   = sy-uname
+        createdat   = ts
+        lastchangedby = sy-uname
+        lastchangedat   = ts )
+    ).
+
+    " Insert data into the database table
+    INSERT zsv_ord_item FROM TABLE @lt_order_items.
+
+  ENDMETHOD.
+
+ENDCLASS.
