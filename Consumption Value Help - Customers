@@ -1,0 +1,18 @@
+@AbapCatalog.viewEnhancementCategory: [#NONE]
+@AccessControl.authorizationCheck: #NOT_REQUIRED
+@EndUserText.label: 'Consumption Value Help - Customers'
+@Metadata.ignorePropagatedAnnotations: true
+@ObjectModel.usageType: {
+  serviceQuality: #X,
+  sizeCategory:   #S,
+  dataClass:      #MIXED
+}
+@ObjectModel.dataCategory: #VALUE_HELP
+define view entity ZC_SV_CUSTOMERVH
+  as select from ZI_SV_CUSTOMERVH
+{
+      @UI.hidden: true
+  key CustomerUuid,
+      Name,
+      Country
+}
