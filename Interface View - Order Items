@@ -1,0 +1,21 @@
+@AbapCatalog.viewEnhancementCategory: [#NONE]
+@AccessControl.authorizationCheck: #NOT_REQUIRED
+@EndUserText.label: 'Interface View - Order Items'
+@Metadata.ignorePropagatedAnnotations: true
+define view entity ZI_SV_ORD_ITEM
+  as select from zsv_ord_item
+{
+  key item_no       as ItemNo,
+  key order_id      as OrderId,
+      product       as Product,
+      @Semantics.quantity.unitOfMeasure: 'Uom'
+      quantity      as Quantity,
+      uom           as Uom,
+      @Semantics.amount.currencyCode: 'Currency'
+      unit_price    as UnitPrice,
+      currency      as Currency,
+      createdby     as Createdby,
+      createdat     as Createdat,
+      lastchangedby as Lastchangedby,
+      lastchangedat as Lastchangedat
+}
