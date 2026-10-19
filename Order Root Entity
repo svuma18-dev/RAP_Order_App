@@ -1,0 +1,25 @@
+@AccessControl.authorizationCheck: #NOT_REQUIRED
+@EndUserText.label: 'Order Root Entity'
+@Metadata.ignorePropagatedAnnotations: true
+define root view entity ZR_SV_ORDER
+  as select from ZI_SV_ORDER
+  composition [0..*] of ZR_SV_ORD_ITEM as _OrderItem
+{
+  key OrderId,
+      CustomerId,
+      OrderDt,
+      @Semantics.amount.currencyCode: 'Currency'
+      Amount,
+      Currency,
+      Status,
+      Comments,
+      @Semantics.user.createdBy: true
+      Createdby,
+      @Semantics.systemDateTime.createdAt: true
+      Createdat,
+      @Semantics.user.lastChangedBy: true
+      Lastchangedby,
+      @Semantics.systemDateTime.lastChangedAt: true
+      Lastchangedat,
+      _OrderItem // Make association public
+}
