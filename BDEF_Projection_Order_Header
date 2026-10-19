@@ -1,0 +1,29 @@
+projection;
+strict ( 2 );
+use draft;
+
+define behavior for ZC_SV_ORDER alias OrderHeader
+{
+  use create;
+  use update;
+  use delete;
+
+  use action complete;
+  use action cancel;
+
+  use action Activate;
+  use action Discard;
+  use action Edit;
+  use action Resume;
+  use action Prepare;
+
+  use association _OrderItem { create; with draft; }
+}
+
+define behavior for ZC_SV_ORD_ITEM alias OrderItems
+{
+  use update;
+  use delete;
+
+  use association _OrderHeader { with draft; }
+}
