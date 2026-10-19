@@ -1,0 +1,16 @@
+@EndUserText.label : 'Customer details'
+@AbapCatalog.enhancement.category : #NOT_EXTENSIBLE
+@AbapCatalog.tableCategory : #TRANSPARENT
+@AbapCatalog.deliveryClass : #A
+@AbapCatalog.dataMaintenance : #RESTRICTED
+define table zsv_customer {
+
+  key client        : abap.clnt not null;
+  key customer_uuid : sysuuid_x16 not null;
+  name              : abap.char(30);
+  city              : abap.char(20);
+  country           : land1;
+  email             : abap.char(40);
+  include zsv_ord_admin;
+
+}
