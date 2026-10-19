@@ -1,0 +1,20 @@
+@AbapCatalog.viewEnhancementCategory: [#NONE]
+@AccessControl.authorizationCheck: #NOT_REQUIRED
+@EndUserText.label: 'Interface View - Order Header'
+@Metadata.ignorePropagatedAnnotations: true
+define view entity ZI_SV_ORDER
+  as select from zsv_order
+{
+  key order_id      as OrderId,
+      customer_id   as CustomerId,
+      order_dt      as OrderDt,
+      @Semantics.amount.currencyCode: 'Currency'
+      amount        as Amount,
+      currency      as Currency,
+      status        as Status,
+      comments      as Comments,
+      createdby     as Createdby,
+      createdat     as Createdat,
+      lastchangedby as Lastchangedby,
+      lastchangedat as Lastchangedat
+}
