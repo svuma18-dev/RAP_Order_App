@@ -1,0 +1,79 @@
+managed implementation in class zbp_r_sv_order unique;
+strict ( 2 );
+with draft;
+
+define behavior for ZR_SV_ORDER alias OrderHeader
+persistent table zsv_order
+draft table zsv_order_d
+lock master total etag Lastchangedat
+authorization master ( instance )
+etag master Lastchangedat
+{
+  create ( authorization : global );
+  update;
+  delete;
+  field ( readonly, numbering : managed ) OrderId;
+  field ( mandatory : create, readonly : update ) CustomerId;
+  //field ( mandatory ) OrderDt;
+  association _OrderItem { create ( features : instance ); with draft; }
+
+  determination setOrderDate on modify { create; }
+
+  action complete result [1]$self;
+  action cancel result [1]$self;
+
+  draft action Activate optimized;
+  draft action Discard;
+  draft action Edit;
+  draft action Resume;
+  draft determine action Prepare;
+
+  mapping for zsv_order
+    {
+      OrderId       = order_id;
+      CustomerId    = customer_id;
+      OrderDt       = order_dt;
+      Amount        = amount;
+      Currency      = currency;
+      Status        = status;
+      Comments      = comments;
+      Createdby     = createdby;
+      Createdat     = createdat;
+      Lastchangedby = lastchangedby;
+      Lastchangedat = lastchangedat;
+    }
+
+}
+
+
+define behavior for ZR_SV_ORD_ITEM alias OrderItems
+persistent table zsv_ord_item
+draft table zsv_ord_item_d
+lock dependent by _OrderHeader
+authorization dependent by _OrderHeader
+etag master Lastchangedat
+{
+  update ( features : instance );
+  delete ( features : instance );
+  field ( readonly, numbering : managed ) ItemNo;
+  field ( readonly ) OrderId;
+
+  validation valItemLimit on save { create; }
+  determination updOrderAmount on save { create; update; }
+  association _OrderHeader { with draft; }
+
+  mapping for zsv_ord_item
+    {
+      ItemNo        = item_no;
+      OrderId       = order_id;
+      Product       = product;
+      Quantity      = quantity;
+      Uom           = uom;
+      UnitPrice     = unit_price;
+      Currency      = currency;
+      Createdby     = createdby;
+      Createdat     = createdat;
+      Lastchangedby = lastchangedby;
+      Lastchangedat = lastchangedat;
+    }
+}
