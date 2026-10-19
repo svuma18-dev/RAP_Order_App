@@ -1,0 +1,4 @@
+@EndUserText.label: 'Service def.customer UI'
+define service ZSV_SD_CUSTOMER {
+  expose ZC_SV_CUSTOMER as Customer;
+}
