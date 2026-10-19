@@ -1,0 +1,22 @@
+@AccessControl.authorizationCheck: #NOT_REQUIRED
+@EndUserText.label: 'Projection on Order Hear'
+@Metadata.ignorePropagatedAnnotations: false
+@Metadata.allowExtensions: true
+define root view entity ZC_SV_ORDER
+  provider contract transactional_query
+  as projection on ZR_SV_ORDER
+{
+  key OrderId,
+      CustomerId,
+      OrderDt,
+      Amount,
+      Currency,
+      Status,
+      Comments,
+      Createdby,
+      Createdat,
+      Lastchangedby,
+      Lastchangedat,
+      /* Associations */
+      _OrderItem : redirected to composition child ZC_SV_ORD_ITEM
+}
