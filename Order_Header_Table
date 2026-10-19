@@ -1,0 +1,22 @@
+@EndUserText.label : 'Order Header'
+@AbapCatalog.enhancement.category : #NOT_EXTENSIBLE
+@AbapCatalog.tableCategory : #TRANSPARENT
+@AbapCatalog.deliveryClass : #A
+@AbapCatalog.dataMaintenance : #RESTRICTED
+define table zsv_order {
+
+  key client    : abap.clnt not null;
+  key order_id  : sysuuid_x16 not null;
+  customer_id   : sysuuid_x16 not null;
+  order_dt      : abap.dats;
+  @Semantics.amount.currencyCode : 'zsv_order.currency'
+  amount        : abap.curr(13,2);
+  currency      : abap.cuky;
+  status        : zsv_ord_st;
+  comments      : abap.char(75);
+  createdby     : abp_creation_user;
+  createdat     : abp_creation_tstmpl;
+  lastchangedby : abp_lastchange_user;
+  lastchangedat : abp_lastchange_tstmpl;
+
+}
