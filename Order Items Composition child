@@ -1,0 +1,26 @@
+@AccessControl.authorizationCheck: #NOT_REQUIRED
+@EndUserText.label: 'Order Items Composition child'
+@Metadata.ignorePropagatedAnnotations: true
+define view entity ZR_SV_ORD_ITEM
+  as select from ZI_SV_ORD_ITEM
+  association to parent ZR_SV_ORDER as _OrderHeader on $projection.OrderId = _OrderHeader.OrderId
+{
+  key ItemNo,
+  key OrderId,
+      Product,
+      @Semantics.quantity.unitOfMeasure: 'Uom'
+      Quantity,
+      Uom,
+      @Semantics.amount.currencyCode: 'Currency'
+      UnitPrice,
+      Currency,
+      @Semantics.user.createdBy: true
+      Createdby,
+      @Semantics.systemDateTime.createdAt: true
+      Createdat,
+      @Semantics.user.lastChangedBy: true
+      Lastchangedby,
+      @Semantics.systemDateTime.lastChangedAt: true
+      Lastchangedat,
+      _OrderHeader // Make association public
+}
